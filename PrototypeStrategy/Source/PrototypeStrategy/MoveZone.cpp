@@ -47,28 +47,28 @@ void AMoveZone::CalcZone(int32 posX, int32 posY)
 	mapMarked[posY*SizeX + posX] = 1;
 	do	
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Start while list num: %d"), list.Num());
+		//UE_LOG(LogTemp, Warning, TEXT("Start while list num: %d"), list.Num());
 		int32  indexToAlg; 
 	list.HeapPop(indexToAlg, true);
-		UE_LOG(LogTemp, Warning, TEXT("indexToAlg: %d"), indexToAlg);
-		UE_LOG(LogTemp, Warning, TEXT("Start HeapPop while list num: %d"), list.Num());
+		//UE_LOG(LogTemp, Warning, TEXT("indexToAlg: %d"), indexToAlg);
+		//UE_LOG(LogTemp, Warning, TEXT("Start HeapPop while list num: %d"), list.Num());
 	bool isSeven = false;
 	//if (mapActionPoint[indexToAlg] < 5)
-	if (mapActionPoint[indexToAlg] >= 70)
+	if (mapActionPoint[indexToAlg] >= MovePoint)// 
 		continue;
-	if(mapActionPoint[indexToAlg]+5 > 70)
+	if(mapActionPoint[indexToAlg]+5 > MovePoint)
 		continue;
 	//if (mapActionPoint[indexToAlg] > 7)
-	if (mapActionPoint[indexToAlg] + 7 <= 70 )
+	if (mapActionPoint[indexToAlg] + 7 <= MovePoint)
 		isSeven = true;
 	int32 Px, Py;
 
 	Px = indexToAlg % SizeX;
 	Py = indexToAlg / SizeX;
-	UE_LOG(LogTemp, Warning, TEXT("Px, Py: %d , %d"), Px, Py);
+	//UE_LOG(LogTemp, Warning, TEXT("Px, Py: %d , %d"), Px, Py);
 	if (isSeven)
 	{
-		UE_LOG(LogTemp, Warning, TEXT(" answer %d"), (Py + 1) );
+		//UE_LOG(LogTemp, Warning, TEXT(" answer %d"), (Py + 1) );
 		// Горизонталь и вертикаль
 		if (((Py + 1) < SizeY))// && 
 			if((mapDistance[(Py + 1)*SizeX + Px] > (mapDistance[indexToAlg] + 5)) && (mapActionPoint[(Py + 1)*SizeX + Px] > (mapActionPoint[indexToAlg] + 5)))
@@ -213,9 +213,9 @@ void AMoveZone::CalcZone(int32 posX, int32 posY)
 
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("End while list num: %d"), list.Num());
+	//UE_LOG(LogTemp, Warning, TEXT("End while list num: %d"), list.Num());
 	}while (list.Num() > 0);
-	UE_LOG(LogTemp, Warning, TEXT("End2 while list num: %d"), list.Num());
+	//UE_LOG(LogTemp, Warning, TEXT("End2 while list num: %d"), list.Num());
 	
 
 	
@@ -236,10 +236,14 @@ void AMoveZone::Tick(float DeltaTime)
 
 }
 
-void AMoveZone::startAlgoritm_Implementation(int32 posX, int32 posY)
+void AMoveZone::startAlgoritm_Implementation(int32 posX, int32 posY, int32 MoveCostNow)
 {
+	MovePoint = MoveCostNow;
+	UE_LOG(LogTemp, Warning, TEXT("MoveZone.cpp(235): MovePoint is %d but MoveCostNow %d"), MovePoint, MoveCostNow);
+	if (MovePoint > 0)
 	CalcZone(posX, posY);
-
+	else
+	UE_LOG(LogTemp, Warning, TEXT("MoveZone.cpp(235): MovePoint <= 0! Look code! MovePoint is %d"), MovePoint);
 
 }
 

@@ -2,6 +2,11 @@
 
 #pragma once
 
+
+#define VERTICAL_HORIZONTAL_COST 5
+#define DIAGONAL_COST 7
+
+
 #include "CoreMinimal.h"
 #include "GridData_st.h"
 #include "GameFramework/Actor.h"
@@ -21,8 +26,13 @@ protected:
 	virtual void BeginPlay() override;
 private:
 	void CalcZone(int32 posX, int32 poY);
+	
 
 public:	
+	
+	int32 MovePoint = 0;
+		
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<FDataGrid1> cells;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -39,8 +49,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Select Zone")
-	void startAlgoritm(int32 posX, int32 posY);
-	void startAlgoritm_Implementation(int32 posX, int32 posY);
+	void startAlgoritm(int32 posX, int32 posY, int32 MoveCostNow);
+	void startAlgoritm_Implementation(int32 posX, int32 posY, int32 MoveCostNow);
 
 	
 	
