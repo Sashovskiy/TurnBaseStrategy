@@ -20,7 +20,7 @@ private:
 		float v_Alpha = 0.f; //Alpha for lerp
 		float coef_Speed = 1.f; //Speed Coefficient, 1 or more - slower, 0.1 or less - faster
 		bool isCanMove = false; // if true char move, if false char no move! it simply
-		
+		bool bEndOfWay = false;
 private:
 		bool GetNextPoint(); // chek if we have point to go, if yes set nextpoint and isCanMove
 private:

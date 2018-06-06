@@ -2,6 +2,7 @@
 
 #include "ParentCharecter.h"
 #include "Algo/Reverse.h"
+#include "MainPlayerController.h"
 #include "Runtime/Engine/Classes/Components/SkeletalMeshComponent.h"
 #include "Runtime/Engine/Classes/Kismet/KismetMathLibrary.h"
 
@@ -91,7 +92,7 @@ bool AParentCharecter::GetNextPoint()
 	if (PointWay_temp.Num() > 0)
 	{
 		tempThisPos = this->GetActorLocation();
-		
+		bEndOfWay = true;
 		
 		mov_NextPoint = PointWay_temp.Pop();
 		
@@ -105,6 +106,15 @@ bool AParentCharecter::GetNextPoint()
 	}
 
 	MainMesh->SetAnimationMode(EAnimationMode::AnimationSingleNode);
+	if (bEndOfWay)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("We in the end of our jorney? | Array: %d"), mov_NextPoint.X, mov_NextPoint.Y, mov_NextPoint.Z, PointWay_temp.Num());
+		AMainPlayerController* Con = Cast<AMainPlayerController>(GetWorld()->GetFirstPlayerController());
+		if (MovePoint > 0)
+			Con->NewCalculate();
+		else
+			Con->PointsOver();
+	}
 	MainMesh->PlayAnimation(idle_anim, true);
 	return false;
 }
