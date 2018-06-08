@@ -110,7 +110,7 @@ bool AParentCharecter::GetNextPoint()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("We in the end of our jorney? | Array: %d"), mov_NextPoint.X, mov_NextPoint.Y, mov_NextPoint.Z, PointWay_temp.Num());
 		AMainPlayerController* Con = Cast<AMainPlayerController>(GetWorld()->GetFirstPlayerController());
-		if (MovePoint > 0)
+		if (MovePoint >= 5)
 			Con->NewCalculate();
 		else
 			Con->PointsOver();

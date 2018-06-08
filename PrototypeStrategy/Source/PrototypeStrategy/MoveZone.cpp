@@ -25,7 +25,7 @@ void AMoveZone::CalcZone(int32 posX, int32 posY)
 
 	double time_alg = FPlatformTime::Seconds();
 
-	TArray<int32> mapMask;
+	TArray<int32> mapMask ;
 	TArray<int32> mapDistance; 
 	TArray<int32> mapMarked; 
 	TArray<int32> mapActionPoint;
@@ -46,119 +46,117 @@ void AMoveZone::CalcZone(int32 posX, int32 posY)
 	mapActionPoint[posY*SizeX + posX] = 0;
 	mapDistance[posY*SizeX + posX] = 0;
 	mapMarked[posY*SizeX + posX] = 1;
+	mapMask = mapMask_BP;
 	do	
 	{
-		//UE_LOG(LogTemp, Warning, TEXT("Start while list num: %d"), list.Num());
-		int32  indexToAlg; 
+	int32  indexToAlg; 
 	list.HeapPop(indexToAlg, true);
-		//UE_LOG(LogTemp, Warning, TEXT("indexToAlg: %d"), indexToAlg);
-		//UE_LOG(LogTemp, Warning, TEXT("Start HeapPop while list num: %d"), list.Num());
+	
 	bool isSeven = false;
-	//if (mapActionPoint[indexToAlg] < 5)
+	
 	if (mapActionPoint[indexToAlg] >= MovePoint)// 
 		continue;
 	if(mapActionPoint[indexToAlg]+5 > MovePoint)
 		continue;
-	//if (mapActionPoint[indexToAlg] > 7)
+	
 	if (mapActionPoint[indexToAlg] + 7 <= MovePoint)
 		isSeven = true;
 	int32 Px, Py;
 
 	Px = indexToAlg % SizeX;
 	Py = indexToAlg / SizeX;
-	//UE_LOG(LogTemp, Warning, TEXT("Px, Py: %d , %d"), Px, Py);
+	
 	if (isSeven)
 	{
-		//UE_LOG(LogTemp, Warning, TEXT(" answer %d"), (Py + 1) );
 		
 		if (((Py + 1) < SizeY))// && 
+			if(mapMask[(Py + 1)*SizeX + Px] == 0 )
 			if((mapDistance[(Py + 1)*SizeX + Px] > (mapDistance[indexToAlg] + 5)) && (mapActionPoint[(Py + 1)*SizeX + Px] > (mapActionPoint[indexToAlg] + 5)))
 		{
 			list.Add((Py + 1)*SizeX + Px);
 			mapDistance[(Py + 1)*SizeX + Px] = (mapDistance[indexToAlg] + 5);
 			mapMarked[(Py + 1)*SizeX + Px] = 1;
 			mapActionPoint[(Py + 1)*SizeX + Px] = (mapActionPoint[indexToAlg] + 5);
-			//TArray<FVector> temp_way = cells[indexToAlg].WayToPoint;
-			cells[(Py + 1)*SizeX + Px].WayToPoint = cells[indexToAlg].WayToPoint;//temp_way;
+			cells[(Py + 1)*SizeX + Px].WayToPoint = cells[indexToAlg].WayToPoint;
 			cells[(Py + 1)*SizeX + Px].WayToPoint.Add(cells[(Py + 1)*SizeX + Px].PointVec);
 		}
 		if (((Px - 1) >= 0) )//&& 
+			if (mapMask[Py*SizeX + (Px - 1)] == 0)
 			if((mapDistance[Py*SizeX + (Px - 1)] > (mapDistance[indexToAlg] + 5)) && (mapActionPoint[Py*SizeX + (Px - 1)] > (mapActionPoint[indexToAlg] + 5)))
 		{
 			list.Add(Py*SizeX + (Px - 1));
 			mapDistance[Py*SizeX + (Px - 1)] = (mapDistance[indexToAlg] + 5);
 			mapMarked[Py*SizeX + (Px - 1)] = 1;
 			mapActionPoint[Py*SizeX + (Px - 1)] = (mapActionPoint[indexToAlg] + 5);
-			//TArray<FVector> temp_way = cells[indexToAlg].WayToPoint;
-			cells[Py*SizeX + (Px - 1)].WayToPoint = cells[indexToAlg].WayToPoint; //temp_way;
+			cells[Py*SizeX + (Px - 1)].WayToPoint = cells[indexToAlg].WayToPoint; 
 			cells[Py*SizeX + (Px - 1)].WayToPoint.Add(cells[Py*SizeX + (Px - 1)].PointVec);
 		}
 		if (((Px + 1) < SizeX)) //&& 
+			if (mapMask[Py*SizeX + (Px + 1)] == 0)
 			if((mapDistance[Py*SizeX + (Px + 1)] > (mapDistance[indexToAlg] + 5)) && (mapActionPoint[Py*SizeX + (Px + 1)] > (mapActionPoint[indexToAlg] + 5)))
 		{
 			list.Add(Py*SizeX + (Px + 1));
 			mapDistance[Py*SizeX + (Px + 1)] = (mapDistance[indexToAlg] + 5);
 			mapMarked[Py*SizeX + (Px + 1)] = 1;
 			mapActionPoint[Py*SizeX + (Px + 1)] = (mapActionPoint[indexToAlg] + 5);
-			//TArray<FVector> temp_way = cells[indexToAlg].WayToPoint;
-			cells[Py*SizeX + (Px + 1)].WayToPoint = cells[indexToAlg].WayToPoint; //temp_way;
+			cells[Py*SizeX + (Px + 1)].WayToPoint = cells[indexToAlg].WayToPoint; 
 			cells[Py*SizeX + (Px + 1)].WayToPoint.Add(cells[Py*SizeX + (Px + 1)].PointVec);
 		}
 		if (((Py - 1) >= 0) )//&& 
+			if (mapMask[(Py - 1)*SizeX + Px] == 0)
 			if((mapDistance[(Py - 1)*SizeX + Px] > (mapDistance[indexToAlg] + 5)) && (mapActionPoint[(Py - 1)*SizeX + Px] > (mapActionPoint[indexToAlg] + 5)))
 		{
 			list.Add((Py - 1)*SizeX + Px);
 			mapDistance[(Py - 1)*SizeX + Px] = (mapDistance[indexToAlg] + 5);
 			mapMarked[(Py - 1)*SizeX + Px] = 1;
 			mapActionPoint[(Py - 1)*SizeX + Px] = (mapActionPoint[indexToAlg] + 5);
-			//TArray<FVector> temp_way = cells[indexToAlg].WayToPoint;
-			cells[(Py - 1)*SizeX + Px].WayToPoint = cells[indexToAlg].WayToPoint;// temp_way;
+			cells[(Py - 1)*SizeX + Px].WayToPoint = cells[indexToAlg].WayToPoint;
 			cells[(Py - 1)*SizeX + Px].WayToPoint.Add(cells[(Py - 1)*SizeX + Px].PointVec);
 		}
 
 		
 		if (((((Py + 1) < SizeY) && (Px - 1) >= 0)) )//&& 
+			if (mapMask[(Py + 1)*SizeX + (Px - 1)] == 0)
 			if((mapDistance[(Py + 1)*SizeX + (Px - 1)] > (mapDistance[indexToAlg] + 7)) && (mapActionPoint[(Py + 1)*SizeX + (Px - 1)] > (mapActionPoint[indexToAlg] + 7)) )
 		{
 			list.Add((Py + 1)*SizeX + (Px - 1));
 			mapDistance[(Py + 1)*SizeX + (Px - 1)] = (mapDistance[indexToAlg] + 7);
 			mapMarked[(Py + 1)*SizeX + (Px - 1)] = 1;
 			mapActionPoint[(Py + 1)*SizeX + (Px - 1)] = (mapActionPoint[indexToAlg] + 7);
-			//TArray<FVector> temp_way = cells[indexToAlg].WayToPoint;
-			cells[(Py + 1)*SizeX + (Px - 1)].WayToPoint = cells[indexToAlg].WayToPoint;//temp_way;
+			cells[(Py + 1)*SizeX + (Px - 1)].WayToPoint = cells[indexToAlg].WayToPoint;
 			cells[(Py + 1)*SizeX + (Px - 1)].WayToPoint.Add(cells[(Py + 1)*SizeX + (Px - 1)].PointVec);
 		}
 		if (((((Py + 1) < SizeY) && (Px + 1) < SizeX)))// && 
+			if (mapMask[(Py + 1)*SizeX + (Px + 1)] == 0)
 			if((mapDistance[(Py + 1)*SizeX + (Px + 1)] > (mapDistance[indexToAlg] + 7)) && (mapActionPoint[(Py + 1)*SizeX + (Px + 1)] > (mapActionPoint[indexToAlg] + 7)) )
 		{
 			list.Add((Py + 1)*SizeX + (Px + 1));
 			mapDistance[(Py + 1)*SizeX + (Px + 1)] = (mapDistance[indexToAlg] + 7);
 			mapMarked[(Py + 1)*SizeX + (Px + 1)] = 1;
 			mapActionPoint[(Py + 1)*SizeX + (Px + 1)] = (mapActionPoint[indexToAlg] + 7);
-			//TArray<FVector> temp_way = cells[indexToAlg].WayToPoint;
-			cells[(Py + 1)*SizeX + (Px + 1)].WayToPoint = cells[indexToAlg].WayToPoint;// temp_way;
+			cells[(Py + 1)*SizeX + (Px + 1)].WayToPoint = cells[indexToAlg].WayToPoint;
 			cells[(Py + 1)*SizeX + (Px + 1)].WayToPoint.Add(cells[(Py + 1)*SizeX + (Px + 1)].PointVec);
 		}
 		if (((((Py - 1) >= 0) && (Px - 1) >= 0)))// && 
+			if (mapMask[(Py - 1)*SizeX + (Px - 1)] == 0)
 			if((mapDistance[(Py - 1)*SizeX + (Px - 1)] > (mapDistance[indexToAlg] + 7)) && (mapActionPoint[(Py - 1)*SizeX + (Px - 1)] > (mapActionPoint[indexToAlg] + 7)) )
 		{
 			list.Add((Py - 1)*SizeX + (Px - 1));
 			mapDistance[(Py - 1)*SizeX + (Px - 1)] = (mapDistance[indexToAlg] + 7);
 			mapMarked[(Py - 1)*SizeX + (Px - 1)] = 1;
 			mapActionPoint[(Py - 1)*SizeX + (Px - 1)] = (mapActionPoint[indexToAlg] + 7);
-			//TArray<FVector> temp_way = cells[indexToAlg].WayToPoint;
-			cells[(Py - 1)*SizeX + (Px - 1)].WayToPoint = cells[indexToAlg].WayToPoint; //temp_way;
+			cells[(Py - 1)*SizeX + (Px - 1)].WayToPoint = cells[indexToAlg].WayToPoint; 
 			cells[(Py - 1)*SizeX + (Px - 1)].WayToPoint.Add(cells[(Py - 1)*SizeX + (Px - 1)].PointVec);
 		}
 		if (((((Py - 1) >= 0) && (Px + 1) < SizeX)))// &&
+			if (mapMask[(Py - 1)*SizeX + (Px + 1)] == 0)
 			if((mapDistance[(Py - 1)*SizeX + (Px + 1)] > (mapDistance[indexToAlg] + 7)) && (mapActionPoint[(Py - 1)*SizeX + (Px + 1)] > (mapActionPoint[indexToAlg] + 7)) )
 		{
 			list.Add(((Py - 1)*SizeX + (Px + 1)));
 			mapDistance[(Py - 1)*SizeX + (Px + 1)] = (mapDistance[indexToAlg] + 7);
 			mapMarked[(Py - 1)*SizeX + (Px + 1)] = 1;
 			mapActionPoint[(Py - 1)*SizeX + (Px + 1)] = (mapActionPoint[indexToAlg] + 7);
-			//TArray<FVector> temp_way = cells[indexToAlg].WayToPoint;
-			cells[(Py - 1)*SizeX + (Px + 1)].WayToPoint = cells[indexToAlg].WayToPoint; //temp_way;
+			cells[(Py - 1)*SizeX + (Px + 1)].WayToPoint = cells[indexToAlg].WayToPoint; 
 			cells[(Py - 1)*SizeX + (Px + 1)].WayToPoint.Add(cells[(Py - 1)*SizeX + (Px + 1)].PointVec);
 		}
 
@@ -168,55 +166,55 @@ void AMoveZone::CalcZone(int32 posX, int32 posY)
 	{
 		
 		if (((Py + 1) < SizeY))// && 
+			if (mapMask[(Py + 1)*SizeX + Px] == 0)
 			if ((mapDistance[(Py + 1)*SizeX + Px] > (mapDistance[indexToAlg] + 5)) && (mapActionPoint[(Py + 1)*SizeX + Px] > (mapActionPoint[indexToAlg] + 5)))
 			{
 				list.Add((Py + 1)*SizeX + Px);
 				mapDistance[(Py + 1)*SizeX + Px] = (mapDistance[indexToAlg] + 5);
 				mapMarked[(Py + 1)*SizeX + Px] = 1;
 				mapActionPoint[(Py + 1)*SizeX + Px] = (mapActionPoint[indexToAlg] + 5);
-				//TArray<FVector> temp_way = cells[indexToAlg].WayToPoint;
-				cells[(Py + 1)*SizeX + Px].WayToPoint = cells[indexToAlg].WayToPoint; //temp_way;
+				cells[(Py + 1)*SizeX + Px].WayToPoint = cells[indexToAlg].WayToPoint; 
 				cells[(Py + 1)*SizeX + Px].WayToPoint.Add(cells[(Py + 1)*SizeX + Px].PointVec);
 			}
 		if (((Px - 1) >= 0))//&& 
+			if (mapMask[Py*SizeX + (Px - 1)] == 0)
 			if ((mapDistance[Py*SizeX + (Px - 1)] > (mapDistance[indexToAlg] + 5)) && (mapActionPoint[Py*SizeX + (Px - 1)] > (mapActionPoint[indexToAlg] + 5)))
 			{
 				list.Add(Py*SizeX + (Px - 1));
 				mapDistance[Py*SizeX + (Px - 1)] = (mapDistance[indexToAlg] + 5);
 				mapMarked[Py*SizeX + (Px - 1)] = 1;
 				mapActionPoint[Py*SizeX + (Px - 1)] = (mapActionPoint[indexToAlg] + 5);
-				//TArray<FVector> temp_way = cells[indexToAlg].WayToPoint;
-				cells[Py*SizeX + (Px - 1)].WayToPoint = cells[indexToAlg].WayToPoint; //temp_way;
+				cells[Py*SizeX + (Px - 1)].WayToPoint = cells[indexToAlg].WayToPoint;
 				cells[Py*SizeX + (Px - 1)].WayToPoint.Add(cells[Py*SizeX + (Px - 1)].PointVec);
 			}
 		if (((Px + 1) < SizeX)) //&& 
+			if (mapMask[Py*SizeX + (	Px + 1)] == 0)
 			if ((mapDistance[Py*SizeX + (Px + 1)] > (mapDistance[indexToAlg] + 5)) && (mapActionPoint[Py*SizeX + (Px + 1)] > (mapActionPoint[indexToAlg] + 5)))
 			{
 				list.Add(Py*SizeX + (Px + 1));
 				mapDistance[Py*SizeX + (Px + 1)] = (mapDistance[indexToAlg] + 5);
 				mapMarked[Py*SizeX + (Px + 1)] = 1;
 				mapActionPoint[Py*SizeX + (Px + 1)] = (mapActionPoint[indexToAlg] + 5);
-				//TArray<FVector> temp_way = cells[indexToAlg].WayToPoint;
-				cells[Py*SizeX + (Px + 1)].WayToPoint = cells[indexToAlg].WayToPoint; //temp_way;
+				cells[Py*SizeX + (Px + 1)].WayToPoint = cells[indexToAlg].WayToPoint; 
 				cells[Py*SizeX + (Px + 1)].WayToPoint.Add(cells[Py*SizeX + (Px + 1)].PointVec);
 			}
 		if (((Py - 1) >= 0))//&& 
+			if (mapMask[(Py - 1)*SizeX + Px] == 0)
 			if ((mapDistance[(Py - 1)*SizeX + Px] > (mapDistance[indexToAlg] + 5)) && (mapActionPoint[(Py - 1)*SizeX + Px] > (mapActionPoint[indexToAlg] + 5)))
 			{
 				list.Add((Py - 1)*SizeX + Px);
 				mapDistance[(Py - 1)*SizeX + Px] = (mapDistance[indexToAlg] + 5);
 				mapMarked[(Py - 1)*SizeX + Px] = 1;
 				mapActionPoint[(Py - 1)*SizeX + Px] = (mapActionPoint[indexToAlg] + 5);
-				//TArray<FVector> temp_way = cells[indexToAlg].WayToPoint;
-				cells[(Py - 1)*SizeX + Px].WayToPoint = cells[indexToAlg].WayToPoint; //temp_way;
+				cells[(Py - 1)*SizeX + Px].WayToPoint = cells[indexToAlg].WayToPoint;
 				cells[(Py - 1)*SizeX + Px].WayToPoint.Add(cells[(Py - 1)*SizeX + Px].PointVec);
 			}
 
 	}
 
-	//UE_LOG(LogTemp, Warning, TEXT("End while list num: %d"), list.Num());
+
 	}while (list.Num() > 0);
-	//UE_LOG(LogTemp, Warning, TEXT("End2 while list num: %d"), list.Num());
+	
 	
 
 	
@@ -229,6 +227,13 @@ void AMoveZone::CalcZone(int32 posX, int32 posY)
 	UE_LOG(LogTemp, Warning, TEXT("time: %lf"), time_alg);
 
 
+}
+
+void AMoveZone::SetMoveZoneData(int32 SizeX, int32 SizeY, int32 SizeBeetwen)
+{
+	this->SizeBeetwenCells = SizeBeetwenCells;
+	this->SizeX = SizeX;
+	this->SizeY = SizeY;
 }
 
 // Called every frame

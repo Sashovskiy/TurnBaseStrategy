@@ -22,5 +22,6 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "MoveAndCalculate")
 		void PointsOver();
 	void PointsOver_Implementation();
-	
+	UFUNCTION(BlueprintCallable, BlueprintPure , Category = "Sec")
+		float GetSec();
 };

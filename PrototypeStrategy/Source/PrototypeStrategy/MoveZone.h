@@ -29,8 +29,14 @@ private:
 	
 
 public:	
-	
-	int32 MovePoint = 0;
+
+
+	UFUNCTION(BlueprintCallable, Category = "Data")
+		void SetMoveZoneData(int32 SizeX, int32 SizeY, int32 SizeBeetwen);
+
+
+
+	int32 MovePoint = 70;
 		
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -47,8 +53,8 @@ public:
 	TArray<int32> test;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<int32> test2;
-
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<int32> mapMask_BP;
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
